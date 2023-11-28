@@ -7,7 +7,8 @@ def run_edu_app():
     st.subheader('데이터')
     df=pd.read_csv('./data/incheon.csv',index_col=0, encoding='cp949')
     df=df.drop('Unnamed: 8',axis=1)
-    df=df.dropna()
+    df['병실수']=df['병실수'].fillna(0)
+    df['진료과목']=df['진료과목'].fillna('보건진료소')
     st.dataframe(df)
 
     gang=df['군구명']=='강화군'
@@ -21,62 +22,65 @@ def run_edu_app():
     gaeyuan=df['군구명']=='계양구'
     sugu=df['군구명']=='서구'
     
-    loca=[(df.loc[gang,]),(ounm),(joun),(dong),(mechu),(unesu),(namdong),(bupang),(gaeyuan),(sugu)]
-    local=['강화군','옹진군','미추홀구','미추홀구','연수구','남동구','부평구','계양구','서구']
+    GA=df.loc[gang,]
+    ga=['강화읍','내가면','송해면','길상면']
+    UJ=df.loc[ounm,]
+    uj=['백령면','연평면','연흥면']
+    JG=df.loc[joun,]
+    jg=['중산동','항동','용동','경동','운서동','율목동','운남동','인현동','신포동','신흥동','유동','답동'
+        ,'내동','신생동','송월동']
+    DG=df.loc[dong,]
+    dg=['만석동','송림동','화수동','송현동','금곡동','화평동']
+    MC=df.loc[mechu,]
+    mc=['주안동','숭의동','용현동','학익동','도화동','문학동','관교동']
+    US=df.loc[unesu,]
+    us=['동춘동','연수동','청학동','옥련동','송도동','선학동']
+    ND=df.loc[namdong,]
+    nd=['구월동','논현동','간석동','서창동','만수동','도림동','고잔동','남촌동']
+    BP=df.loc[bupang,]
+    bp=['구산동','부평동','산곡동','삼산동','청천동','십정동','부개동',
+        '갈산동','일신동']
+    GY=df.loc[gaeyuan,]
+    gy=['계산동','작전동','효성동','갈현동','임학동','용종동','병방동','박촌동','귤현동','동양동']
+    SG=df.loc[sugu,]
+    sg=['석남동','심곡동','왕길동','가좌동','원당동','청라동','연희동'
+        ,'마전동','경서동','대곡동','가정동','당하동','신현동','검암동'
+        ,'불로동','오류동']
+    
+    list_1 = ['내과','안과','치과','외과','소아과']
 
-    def list_ck(list):
-        loca=[(df.loc[gang,]),(ounm),(joun),(dong),(mechu),(unesu),(namdong),(bupang),(gaeyuan),(sugu)]
-        list = ['내과','치과','안과','피부과','정형외과','외과' ]
-        List=st.selectbox('과목을 선택하시오.',list)
-        if List == list[0]:
-                st.dataframe(loca[0].loc[(loca[0]['소재지'].str.contains(ga[0])&loca[0]['진료과목'].str.contains(list[0])),])
-        elif List == list[1]:
-                st.dataframe(GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list[1])),])
-        elif List == list[2]:
-                st.dataframe(GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list[2])),])
-        elif List == list[3]:
-                st.dataframe(GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list[3])),])
-        elif List == list[4]:
-                st.dataframe(GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list[4])),])
-        elif List == list[5]:
-                st.dataframe(GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list[5])),])
-
-    def local_list(local):
-        loca=[(gang),(ounm),(joun),(dong),(mechu),(unesu),(namdong),(bupang),(gaeyuan),(sugu)]
-        local=['강화군','옹진군','미추홀구','미추홀구','연수구','남동구','부평구','계양구','서구']
-        local_choice=st.selectbox('동을 선택해주새요.',local)
-        ga=['강화읍','내가면','송해면','길상면']
-        ga_choice=st.selectbox('동을 선택해주새요.',ga)
-        if local_choice == local[0]:
-            if ga_choice == ga[0]:
-                list_ck(list)
-        elif ga_choice == ga[1]:
-            st.dataframe(GA.loc[GA['소재지'].str.contains('내가면'),])
-        elif ga_choice == ga[2]:
-            st.dataframe(GA.loc[GA['소재지'].str.contains('송해면'),])
-        elif ga_choice == ga[3]:
-            st.dataframe(GA.loc[GA['소재지'].str.contains('길상면'),])
+    #ef inchon():
         
 
-    
+
+
     st.text('군구명을 선택하시오.')
     if st.checkbox('강화군'):
-        
-        GA=df.loc[gang,]
-        ga=['강화읍','내가면','송해면','길상면']
         ga_choice=st.selectbox('동을 선택해주새요.',ga)
         if ga_choice == ga[0]:
-            list_ck(list)
-            
+            list_1_cho = st.selectbox('과목을 선택하시오',list_1)
+            if list_1_cho == list_1[0]:
+                st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list_1[0])),]))
+            elif list_1_cho ==list_1[1]:
+                st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list_1[1])),]))
         elif ga_choice == ga[1]:
-            st.dataframe(GA.loc[GA['소재지'].str.contains('내가면'),])
+            list_1_cho = st.selectbox('과목을 선택하시오',list_1)
+            if list_1_cho == list_1[0]:
+                if True:
+                    st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[1])&GA['진료과목'].str.contains(list_1[0])),]))
+                elif False:
+                    st.text('일치하는 데이터가 없습니다.')
+            elif list_1_cho ==list_1[1]:
+                if True:
+                    st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[1])&GA['진료과목'].str.contains(list_1[1])),]))
+                elif False:
+                    st.text('일치하는 데이터가 없습니다.')
         elif ga_choice == ga[2]:
             st.dataframe(GA.loc[GA['소재지'].str.contains('송해면'),])
         elif ga_choice == ga[3]:
             st.dataframe(GA.loc[GA['소재지'].str.contains('길상면'),])
+
     if st.checkbox('옹진군'):
-        UJ=df.loc[ounm,]
-        uj=['백령면','연평면','연흥면']
         uj_choice=st.selectbox('동을 선택해주새요.',uj)
         if uj_choice == uj[0]:
             st.dataframe(UJ.loc[UJ['소재지'].str.contains('백령면'),])
@@ -84,10 +88,8 @@ def run_edu_app():
             st.dataframe(UJ.loc[UJ['소재지'].str.contains('연평면'),])
         elif uj_choice == uj[2]:
             st.dataframe(UJ.loc[UJ['소재지'].str.contains('연흥면'),])
+
     if st.checkbox('중구'):
-        JG=df.loc[joun,]
-        jg=['중산동','항동','용동','경동','운서동','율목동','운남동','인현동','신포동','신흥동','유동','답동'
-            ,'내동','신생동','송월동']
         jg_choice=st.selectbox('동을 선택해주새요.',jg)
         if jg_choice == jg[0]:
             st.dataframe(JG.loc[JG['소재지'].str.contains('중산동'),])
@@ -117,9 +119,8 @@ def run_edu_app():
             st.dataframe(JG.loc[JG['소재지'].str.contains('신생동'),])
         elif jg_choice == jg[13]:
             st.dataframe(JG.loc[JG['소재지'].str.contains('송월동'),])
+
     if st.checkbox('동구'):
-        DG=df.loc[dong,]
-        dg=['만석동','송림동','화수동','송현동','금곡동','화평동']
         dg_choice=st.selectbox('동을 선택해주새요.',dg)
         if dg_choice == dg[0]:
             st.dataframe(DG.loc[DG['소재지'].str.contains('만석동'),])
@@ -133,9 +134,8 @@ def run_edu_app():
             st.dataframe(DG.loc[DG['소재지'].str.contains('금곡동'),])
         elif dg_choice == dg[5]:
             st.dataframe(DG.loc[DG['소재지'].str.contains('화평동'),])
+
     if st.checkbox('미추홀구'):
-        MC=df.loc[mechu,]
-        mc=['주안동','숭의동','용현동','학익동','도화동','문학동','관교동']
         mc_choice=st.selectbox('동을 선택해주새요.',mc)
         if mc_choice == mc[0]:
             st.dataframe(MC.loc[MC['소재지'].str.contains('주안동'),])
@@ -153,8 +153,6 @@ def run_edu_app():
             st.dataframe(MC.loc[MC['소재지'].str.contains('관교동'),])
 
     if st.checkbox('연수구'):
-        US=df.loc[unesu,]
-        us=['동춘동','연수동','청학동','옥련동','송도동','선학동']
         us_choice=st.selectbox('동을 선택해주새요.',us)
         if us_choice == us[0]:
             st.dataframe(US.loc[US['소재지'].str.contains('동춘동'),])
@@ -170,8 +168,6 @@ def run_edu_app():
             st.dataframe(US.loc[US['소재지'].str.contains('선학동'),])
 
     if st.checkbox('남동구'):
-        ND=df.loc[namdong,]
-        nd=['구월동','논현동','간석동','서창동','만수동','도림동','고잔동','남촌동']
         nd_choice=st.selectbox('동을 선택해주새요.',nd)
         if nd_choice == nd[0]:
             st.dataframe(ND.loc[ND['소재지'].str.contains('구월동'),])
@@ -191,9 +187,6 @@ def run_edu_app():
             st.dataframe(ND.loc[ND['소재지'].str.contains('남촌동'),])
             
     if st.checkbox('부평구'):
-        BP=df.loc[bupang,]
-        bp=['구산동','부평동','산곡동','삼산동','청천동','십정동','부개동',
-            '갈산동','일신동']
         bp_choice=st.selectbox('동을 선택해주새요.',bp)
         if bp_choice == bp[0]:
             st.dataframe(BP.loc[BP['소재지'].str.contains('구산동'),])
@@ -215,8 +208,6 @@ def run_edu_app():
             st.dataframe(BP.loc[BP['소재지'].str.contains('일신동'),])
 
     if st.checkbox('계양구'):
-        GY=df.loc[gaeyuan,]
-        gy=['계산동','작전동','효성동','갈현동','임학동','용종동','병방동','박촌동','귤현동','동양동']
         gy_choice=st.selectbox('동을 선택해주새요.',gy)
         if gy_choice == gy[0]:
             st.dataframe(GY.loc[GY['소재지'].str.contains('계산동'),])
@@ -238,11 +229,8 @@ def run_edu_app():
             st.dataframe(GY.loc[GY['소재지'].str.contains('귤현동'),])
         elif gy_choice == gy[9]:
             st.dataframe(GY.loc[GY['소재지'].str.contains('동양동'),])
+
     if st.checkbox('서구'):
-        SG=df.loc[sugu,]
-        sg=['석남동','심곡동','왕길동','가좌동','원당동','청라동','연희동'
-            ,'마전동','경서동','대곡동','가정동','당하동','신현동','검암동'
-            ,'불로동','오류동']
         sg_choice=st.selectbox('동을 선택해주새요.',sg)
         if sg_choice == sg[0]:
             st.dataframe(SG.loc[SG['소재지'].str.contains('석남동'),])
@@ -278,4 +266,3 @@ def run_edu_app():
             st.dataframe(SG.loc[SG['소재지'].str.contains('불로동'),])
         elif sg_choice == sg[16]:
             st.dataframe(SG.loc[SG['소재지'].str.contains('오류동'),])
-    
