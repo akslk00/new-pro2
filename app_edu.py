@@ -49,7 +49,8 @@ def run_edu_app():
     
     list_1 = ['내과','안과','치과','외과','소아과']
 
-    #ef inchon():
+    #def inchon():
+
         
 
 
@@ -60,7 +61,7 @@ def run_edu_app():
         if ga_choice == ga[0]:
             list_1_cho = st.selectbox('과목을 선택하시오',list_1)
             if list_1_cho == list_1[0]:
-                st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list_1[0])),]))
+                st.dataframe((GA.loc[(df['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list_1[0])),]))
             elif list_1_cho ==list_1[1]:
                 st.dataframe((GA.loc[(GA['소재지'].str.contains(ga[0])&GA['진료과목'].str.contains(list_1[1])),]))
         elif ga_choice == ga[1]:
